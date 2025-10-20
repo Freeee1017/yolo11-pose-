@@ -1,0 +1,8 @@
+opencv-python>=4.7.0
+numpy>=1.22
+pyyaml>=6.0
+matplotlib>=3.6
+scipy>=1.9
+# 可选：日志
+tensorboard>=2.12 ; platform_system != "Windows" or python_version >= "3.9"
+# 注意：PyTorch 请按 https://pytorch.org/ 安装以匹配本机环境（CUDA/CPU）

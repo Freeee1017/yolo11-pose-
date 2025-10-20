@@ -1,0 +1,73 @@
+# YOLO11婴儿关键点检测配置文件
+
+# 模型配置
+nc: 1        # 类别数 (婴儿)
+nk: 21       # 关键点数量
+classes: ["baby"]  # 类别名称列表
+# 训练配置
+img_size: 640
+batch_size: 16
+epochs: 50
+lr: 0.001
+weight_decay: 0.0005
+num_workers: 4
+seed: 42
+# 数据路径配置
+train_img_dir: "f:/dataset/images/train"
+train_label_dir: "f:/dataset/labels/train"
+val_img_dir: "f:/dataset/images/val"
+val_label_dir: "f:/dataset/labels/val"
+
+# 输出路径配置
+save_dir: "runs/train"
+log_dir: "runs/logs"
+
+# 训练策略
+warmup_epochs: 3
+cos_lr: true
+patience: 10  # 早停patience
+early_stop: true            # 是否启用早停
+early_stop_metric: mean_iou # 监控的指标: val_loss 
+early_stop_mode: max        # 指标方向: min 或 max
+early_stop_delta: 0.0       # 至少改善多少才算改进 (防止微小噪声)
+val_interval: 1             # 验证间隔
+
+
+# 数据增强开关
+# 是否启用数据增强（仅训练集使用；验证集始终不启用）
+use_augmentation: true
+
+
+# 验证可视化（val_vis）配置
+# 是否在验证阶段保存可视化结果（bbox+关键点已映射回原图）
+val_visualize: true
+# 每隔多少个 epoch 进行一次可视化保存（1 表示每个 epoch 都保存一次）
+val_visual_interval: 1
+# 每个批次最多保存的图片张数（建议 1-4）
+val_visual_max_images: 2
+
+
+# 数据增强超参数配置
+horizontal_flip_prob: 0.5  # 水平翻转概率
+rotation_prob: 0        # 旋转概率
+rotation_range: 15.0      # 旋转角度范围 (±)
+scale_prob: 0.3           # 缩放概率
+scale_range: [0.9, 1.1]   # 缩放范围
+translation_prob: 0.3     # 平移概率
+translation_range: 0.05   # 平移范围 (相对宽/高比例)
+color_prob: 0.4           # 颜色增强概率
+brightness_range: 0.1     # 亮度调整范围 (相对缩放/偏移)
+contrast_range: 0.1       # 对比度调整范围
+
+# 损失函数权重
+lambda_box: 7.5
+lambda_cls: 0.5
+lambda_kpt: 50000
+lambda_dfl: 1.5  # DFL损失权重 (优先级高于旧键 dfl)
+lambda_kpt_vis: 1.0
+kpt_vis_threshold: 0.5  # 关键点可见性阈值（>此值视为可见）
+
+# 推理策略：Top-K融合（可缓解网格量化误差；默认关闭以保持与旧版一致）
+topk_fuse: true   # 是否启用Top-K加权融合（推理时）
+topk: 10            # 融合的锚点数量K
+fuse_temp: 0.5     # 温度系数，越小越接近Top-1（建议 0.3~1.0）
